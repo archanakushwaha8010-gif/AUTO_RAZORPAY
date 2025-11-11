@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: card-checker-api
+    env: python
+    plan: free
+    buildCommand: |-
+      pip install -r requirements.txt
+      sudo apt-get update
+      sudo apt-get install -y php curl
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+      sudo apt-get update
+      sudo apt-get install -y google-chrome-stable
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PORT
+        value: 5000
